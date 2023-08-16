@@ -6,8 +6,8 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('@/views/Home.vue'),
+    name: 'HomePage',
+    component: () => import('@/views/HomePage.vue'),
   },
   {
     path: '/all-currencies',
@@ -16,7 +16,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '*',
-    redirect: { name: 'Home' },
+    redirect: { name: 'HomePage' },
   },
 ]
 

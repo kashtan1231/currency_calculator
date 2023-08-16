@@ -1,13 +1,7 @@
 <template>
-  <div
-    class="base-currency-input"
-    v-click-outside="closeCurrencySelector"
-  >
+  <div class="base-currency-input" v-click-outside="closeCurrencySelector">
     <label
-      :class="[
-        'base-currency-input__label',
-        { 'move-label': isInputFocused || value },
-      ]"
+      :class="['base-currency-input__label', { 'move-label': isInputFocused || value }]"
       :for="`field-input-${id}`"
       >{{ label }}</label
     >
@@ -21,15 +15,12 @@
         :id="`field-input-${id}`"
       />
 
-      <div
-        class="base-currency-input__currency"
-        @click="switchCurrencySelector"
-      >
+      <div class="base-currency-input__currency" @click="switchCurrencySelector">
         <p>{{ selectedCurrency.cc }}</p>
         <div
           :class="[
             'base-currency-input__currency-arrow',
-            { 'active-arrow': isCurrencySelectorShown },
+            { 'active-arrow': isCurrencySelectorShown }
           ]"
         ></div>
       </div>
@@ -39,10 +30,7 @@
       {{ helper }}
     </p>
 
-    <div
-      v-if="isCurrencySelectorShown"
-      class="base-currency-input__currency-selector"
-    >
+    <div v-if="isCurrencySelectorShown" class="base-currency-input__currency-selector">
       <BaseSearchInput
         v-model="searchedCurrency"
         class="base-currency-input__search"
@@ -55,11 +43,7 @@
         @click="chooseCurrency(item)"
         :key="item.cc"
       >
-        <img
-          src="@/assets/star-shaded.svg"
-          class="currency-item__star"
-          alt="star-shaded"
-        />
+        <img src="@/assets/star-shaded.svg" class="currency-item__star" alt="star-shaded" />
         <p class="currency-item__txt">{{ item.txt }}</p>
         <p class="currency-item__cc">{{ item.cc }}</p>
       </div>
@@ -83,7 +67,7 @@ import vClickOutside from 'v-click-outside'
 import BaseSearchInput from './BaseSearchInput.vue'
 
 @Component({
-  components: { BaseSearchInput },
+  components: { BaseSearchInput }
 })
 export default class BaseCurrencyInput extends Vue {
   @Prop({ default: '' }) value!: number | null
@@ -116,7 +100,6 @@ export default class BaseCurrencyInput extends Vue {
     this.isCurrencySelectorShown = false
   }
   chooseCurrency(newCurrency: Record<string, string>): void {
-    this.selectedCurrency = newCurrency
     this.$emit('chooseCurrency', newCurrency)
     this.closeCurrencySelector()
   }
@@ -140,6 +123,7 @@ export default class BaseCurrencyInput extends Vue {
 
   created(): void {
     Vue.use(vClickOutside)
+    this.chooseCurrency(this.currenciesList[this.id])
   }
 }
 </script>

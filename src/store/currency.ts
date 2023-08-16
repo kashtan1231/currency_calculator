@@ -1,61 +1,57 @@
+import { Currency } from '@/models'
+
 export default {
   namespaced: true,
   state: {
     allCurrenciesList: [],
     currenciesList: [],
-    favoriteList: [],
+    favoriteList: []
   },
   mutations: {
-    setCurrencies(
-      state: any,
-      currenciesList: Array<Record<string, string>>
-    ): void {
+    setCurrencies(state: any, currenciesList: Currency[]): void {
       state.currenciesList = [...currenciesList]
       const hryvniaObject = {
         cc: 'UAH',
         exchangedate: '23.05.2023',
         rate: 1,
-        txt: 'Гривня',
+        txt: 'Гривня'
       }
       state.currenciesList.unshift(hryvniaObject)
     },
 
-    setAllCurrencies(
-      state: any,
-      currenciesList: Array<Record<string, string>>
-    ): void {
+    setAllCurrencies(state: any, currenciesList: Currency[]): void {
+      currenciesList = currenciesList.map((item: Currency) => {
+        return { ...item, reserve: 200000 }
+      })
       state.allCurrenciesList = [...currenciesList]
       const hryvniaObject = {
         cc: 'UAH',
         exchangedate: '23.05.2023',
         rate: 1,
-        txt: 'Гривня',
+        txt: 'Гривня'
       }
       state.allCurrenciesList.unshift(hryvniaObject)
     },
 
-    addToFavorites(state: any, newFavoriteItem: Record<string, string>) {
+    addToFavorites(state: any, newFavoriteItem: Currency): void {
       state.favoriteList.unshift(newFavoriteItem)
       const indexToRemove = state.currenciesList.findIndex(
-        (item: any) => item.cc === newFavoriteItem.cc
+        (item: Currency) => item.cc === newFavoriteItem.cc
       )
       if (indexToRemove !== -1) {
         state.currenciesList.splice(indexToRemove, 1)
       }
     },
 
-    removeFromFavorites(
-      state: any,
-      removeFavoriteItem: Record<string, string>
-    ) {
+    removeFromFavorites(state: any, removeFavoriteItem: Currency): void {
       state.currenciesList.push(removeFavoriteItem)
 
       const indexToRemove = state.favoriteList.findIndex(
-        (item: any) => item.cc === removeFavoriteItem.cc
+        (item: Currency) => item.cc === removeFavoriteItem.cc
       )
       if (indexToRemove !== -1) {
         state.favoriteList.splice(indexToRemove, 1)
       }
-    },
-  },
+    }
+  }
 }
