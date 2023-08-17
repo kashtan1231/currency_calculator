@@ -7,6 +7,16 @@ export default {
     currenciesList: [],
     favoriteList: []
   },
+  getters: {
+    getNeededCurrency:
+      (state: any) =>
+      (currency: Currency): Currency => {
+        const neededCurency = state.allCurrenciesList.find((item: Currency) => {
+          return item.cc === currency.cc
+        })
+        return neededCurency
+      }
+  },
   mutations: {
     setCurrencies(state: any, currenciesList: Currency[]): void {
       state.currenciesList = [...currenciesList]
@@ -28,9 +38,19 @@ export default {
         cc: 'UAH',
         exchangedate: '23.05.2023',
         rate: 1,
-        txt: 'Гривня'
+        txt: 'Гривня',
+        reserve: 200000
       }
       state.allCurrenciesList.unshift(hryvniaObject)
+    },
+
+    makeExchange(state: any, currency: Currency): void {
+      if (currency.value) {
+        const neededCurrency = state.allCurrenciesList.find(
+          (item: Currency) => item.cc === currency.cc
+        )
+        neededCurrency.reserve -= currency.value
+      }
     },
 
     addToFavorites(state: any, newFavoriteItem: Currency): void {

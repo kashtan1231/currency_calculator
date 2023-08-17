@@ -27,8 +27,9 @@
     </div>
 
     <p class="base-currency-input__helper">
-      {{ helper }}
+      {{ selectedCurrency.txt }}
     </p>
+    <p class="base-currency-input__helper">Резерв: {{ actualReserve }}</p>
 
     <div v-if="isCurrencySelectorShown" class="base-currency-input__currency-selector">
       <BaseSearchInput
@@ -65,6 +66,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import vClickOutside from 'v-click-outside'
 import BaseSearchInput from './BaseSearchInput.vue'
+import { Currency } from '@/models'
 
 @Component({
   components: { BaseSearchInput }
@@ -83,14 +85,15 @@ export default class BaseCurrencyInput extends Vue {
     return this.$store.state.currency.favoriteList
   }
   get currenciesList(): Array<Record<string, string>> {
-    return this.$store.state.currency.currenciesList.filter(
+    return this.$store.state.currency.allCurrenciesList.filter(
       (item: any) =>
         item.cc.toLowerCase().includes(this.searchedCurrency.toLowerCase()) ||
         item.txt.toLowerCase().includes(this.searchedCurrency.toLowerCase())
     )
   }
-  get helper(): string {
-    return this.selectedCurrency.txt || 'Виберіть валюту зі списку'
+  get actualReserve(): number {
+    const neededCurrency = this.$store.getters['currency/getNeededCurrency'](this.selectedCurrency)
+    return neededCurrency?.reserve.toFixed(0)
   }
 
   switchCurrencySelector(): void {

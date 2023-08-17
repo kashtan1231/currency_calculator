@@ -23,7 +23,13 @@
         label="Отримую"
       />
 
-      <button class="home-page__exchange-button" @click="exchange">Обміняти</button>
+      <button
+        class="home-page__exchange-button"
+        @click="exchange"
+        :disabled="isExchangeButtonDisabled"
+      >
+        Обміняти
+      </button>
     </div>
 
     <p class="home-page__exchange-rate">
@@ -61,18 +67,21 @@ export default class HomePage extends Vue {
       (this.inputFirst.rate / this.inputSecond.rate).toFixed(4)
     )} ${this.inputSecond.cc}`
   }
+  get isExchangeButtonDisabled(): boolean {
+    const exchangeResult = this.actualReserve - (this.inputSecond.value || 0)
+    return Boolean(!this.inputSecond.value) || exchangeResult < 0
+  }
+  get actualReserve(): number {
+    const neededCurrency = this.$store.getters['currency/getNeededCurrency'](this.inputSecond)
+    return neededCurrency?.reserve.toFixed(0)
+  }
 
   chooseFirstCurrency(newCurrency: Currency): void {
-    this.inputFirst.rate = newCurrency.rate
-    this.inputFirst.cc = newCurrency.cc
-    this.inputFirst.txt = newCurrency.txt
-
+    this.inputFirst = { ...this.inputFirst, ...newCurrency }
     this.calculateSecondInput()
   }
   chooseSecondCurrency(newCurrency: Currency): void {
-    this.inputSecond.rate = newCurrency.rate
-    this.inputSecond.cc = newCurrency.cc
-    this.inputSecond.txt = newCurrency.txt
+    this.inputSecond = { ...this.inputSecond, ...newCurrency }
     this.calculateSecondInput()
   }
   calculateFirstInput(): void {
@@ -95,7 +104,7 @@ export default class HomePage extends Vue {
   }
 
   exchange(): void {
-    return
+    this.$store.commit('currency/makeExchange', this.inputSecond)
   }
 }
 </script>
@@ -147,6 +156,16 @@ export default class HomePage extends Vue {
     &:hover {
       background-color: $red;
       color: $white;
+    }
+
+    &:disabled {
+      cursor: default;
+      box-shadow: none;
+
+      &:hover {
+        background-color: $gray;
+        color: $black;
+      }
     }
   }
 
