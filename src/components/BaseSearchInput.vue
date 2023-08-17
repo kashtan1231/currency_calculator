@@ -1,12 +1,8 @@
 <template>
   <div class="base-search-input">
-    <label
-      :class="[
-        'base-search-input__label',
-        { 'move-label': isInputFocused || value },
-      ]"
-      >{{ label }}</label
-    >
+    <label :class="['base-search-input__label', { 'move-label': isInputFocused || value }]">{{
+      label
+    }}</label>
     <div class="base-search-input__wrapper">
       <input
         class="base-search-input__field-input"

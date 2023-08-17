@@ -10,11 +10,11 @@ module.exports = {
           vendors: {
             test: /[\\/]node_modules[\\/]/,
             priority: -10,
-            reuseExistingChunk: true,
-          },
-        },
-      },
-    },
+            reuseExistingChunk: true
+          }
+        }
+      }
+    }
   },
   css: {
     loaderOptions: {
@@ -22,8 +22,9 @@ module.exports = {
         prependData: `
             @import "@/design/_typography.scss";
             @import "@/design/_colors.scss";
-          `,
-      },
-    },
-  },
-};
+            @import "@/design/default.scss";
+          `
+      }
+    }
+  }
+}

@@ -48,53 +48,11 @@ export default class App extends Vue {
   font-weight: 400;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  scrollbar-width: thin;
-  scrollbar-color: #d8d8d8 white;
-}
-
-html,
-body {
-  width: 100vw;
-  overflow-x: hidden;
-}
-
-button {
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-}
-
-input {
-  border: none;
-  outline: none;
-  background-color: transparent;
-}
-
 .page {
   height: 100%;
   width: 100%;
   max-width: 1279px;
   padding: 60px 0 60px;
   background-color: $white;
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background-color: transparent;
-}
-
-::-webkit-scrollbar {
-  width: 3px;
-  height: 4px;
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: #a8a8a8;
 }
 </style>

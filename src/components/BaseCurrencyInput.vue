@@ -40,18 +40,6 @@
         class="base-currency-input__search"
         label="Введіть валюту"
       />
-
-      <div
-        v-for="item in favoriteList"
-        class="currency-item"
-        @click="chooseCurrency(item)"
-        :key="item.cc"
-      >
-        <img src="@/assets/star-shaded.svg" class="currency-item__star" alt="star-shaded" />
-        <p class="currency-item__txt">{{ item.txt }}</p>
-        <p class="currency-item__cc">{{ item.cc }}</p>
-      </div>
-
       <div
         v-for="item in currenciesList"
         class="currency-item"
@@ -85,9 +73,6 @@ export default class BaseCurrencyInput extends Vue {
   isInputFocused = false
   isCurrencySelectorShown = false
 
-  get favoriteList(): Currency[] {
-    return this.$store.state.currency.favoriteList
-  }
   get currenciesList(): Currency[] {
     return this.$store.state.currency.allCurrenciesList.filter(
       (item: Currency) =>
