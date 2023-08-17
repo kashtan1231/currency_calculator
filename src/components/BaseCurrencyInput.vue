@@ -29,7 +29,10 @@
     <p class="base-currency-input__helper">
       {{ selectedCurrency.txt }}
     </p>
-    <p class="base-currency-input__helper">Резерв: {{ actualReserve }}</p>
+    <div class="base-currency-input__reserve-and-warning">
+      <p class="base-currency-input__helper">Резерв: {{ actualReserve }}</p>
+      <p v-if="isWarningShown" class="base-currency-input__warning">Недостатній резерв</p>
+    </div>
 
     <div v-if="isCurrencySelectorShown" class="base-currency-input__currency-selector">
       <BaseSearchInput
@@ -72,21 +75,22 @@ import { Currency } from '@/models'
   components: { BaseSearchInput }
 })
 export default class BaseCurrencyInput extends Vue {
-  @Prop({ default: '' }) value!: number | null
-  @Prop({ default: '' }) label!: string
-  @Prop({ default: '' }) selectedCurrency!: Record<string, string>
+  @Prop({ default: null }) value!: number | null
   @Prop({ default: null }) id!: number
+  @Prop({ default: '' }) label!: string
+  @Prop({ default: false }) isWarningShown!: boolean
+  @Prop({ default: {} }) selectedCurrency!: Currency
 
   searchedCurrency = ''
   isInputFocused = false
   isCurrencySelectorShown = false
 
-  get favoriteList(): Array<Record<string, string>> {
+  get favoriteList(): Currency[] {
     return this.$store.state.currency.favoriteList
   }
-  get currenciesList(): Array<Record<string, string>> {
+  get currenciesList(): Currency[] {
     return this.$store.state.currency.allCurrenciesList.filter(
-      (item: any) =>
+      (item: Currency) =>
         item.cc.toLowerCase().includes(this.searchedCurrency.toLowerCase()) ||
         item.txt.toLowerCase().includes(this.searchedCurrency.toLowerCase())
     )
@@ -102,7 +106,7 @@ export default class BaseCurrencyInput extends Vue {
   closeCurrencySelector(): void {
     this.isCurrencySelectorShown = false
   }
-  chooseCurrency(newCurrency: Record<string, string>): void {
+  chooseCurrency(newCurrency: Currency): void {
     this.$emit('chooseCurrency', newCurrency)
     this.closeCurrencySelector()
   }
@@ -216,6 +220,16 @@ export default class BaseCurrencyInput extends Vue {
 
   &__helper {
     margin-top: 8px;
+  }
+
+  &__reserve-and-warning {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__warning {
+    margin-top: 8px;
+    color: $red;
   }
 
   &__currency-selector {

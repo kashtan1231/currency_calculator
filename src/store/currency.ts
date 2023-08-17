@@ -4,6 +4,7 @@ export default {
   namespaced: true,
   state: {
     allCurrenciesList: [],
+    madeExchangesList: [],
     currenciesList: [],
     favoriteList: []
   },
@@ -44,12 +45,19 @@ export default {
       state.allCurrenciesList.unshift(hryvniaObject)
     },
 
-    makeExchange(state: any, currency: Currency): void {
-      if (currency.value) {
+    makeExchange(state: any, payload: any): void {
+      if (payload.inputSecond.value) {
         const neededCurrency = state.allCurrenciesList.find(
-          (item: Currency) => item.cc === currency.cc
+          (item: Currency) => item.cc === payload.inputSecond.cc
         )
-        neededCurrency.reserve -= currency.value
+        neededCurrency.reserve -= payload.inputSecond.value
+        const exchangeId = state.madeExchangesList.length - 1
+        state.madeExchangesList.push({
+          firstCurrency: payload.inputFirst,
+          secondCurrency: payload.inputSecond,
+          exchangeRate: payload.exchangeRate,
+          id: exchangeId
+        })
       }
     },
 

@@ -12,10 +12,10 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component
 export default class TheHeader extends Vue {
   get linkText(): string {
-    return `Перейти до ${this.$route.name === 'HomePage' ? 'всіх курсів' : 'обміну'}`
+    return `Перейти до ${this.$route.name === 'HomePage' ? 'створених обмінів' : 'обміну'}`
   }
   get linkName(): string {
-    return this.$route.name === 'HomePage' ? 'AllCurrencies' : 'HomePage'
+    return this.$route.name === 'HomePage' ? 'MadeExchangesPage' : 'HomePage'
   }
 }
 </script>

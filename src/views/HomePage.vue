@@ -20,6 +20,7 @@
         @chooseCurrency="chooseSecondCurrency"
         :selectedCurrency="inputSecond"
         :id="1"
+        :isWarningShown="isReserveNotEnough"
         label="Отримую"
       />
 
@@ -33,7 +34,7 @@
     </div>
 
     <p class="home-page__exchange-rate">
-      {{ getExchangeRate }}
+      {{ getExchangeRateString }}
     </p>
   </div>
 </template>
@@ -62,14 +63,17 @@ export default class HomePage extends Vue {
     reserve: 0
   }
 
-  get getExchangeRate(): string {
+  get getExchangeRateString(): string {
     return `Курс обміну: 1 ${this.inputFirst.cc} = ${parseFloat(
       (this.inputFirst.rate / this.inputSecond.rate).toFixed(4)
     )} ${this.inputSecond.cc}`
   }
   get isExchangeButtonDisabled(): boolean {
+    return Boolean(!this.inputSecond.value) || this.isReserveNotEnough
+  }
+  get isReserveNotEnough(): boolean {
     const exchangeResult = this.actualReserve - (this.inputSecond.value || 0)
-    return Boolean(!this.inputSecond.value) || exchangeResult < 0
+    return exchangeResult < 0
   }
   get actualReserve(): number {
     const neededCurrency = this.$store.getters['currency/getNeededCurrency'](this.inputSecond)
@@ -104,7 +108,13 @@ export default class HomePage extends Vue {
   }
 
   exchange(): void {
-    this.$store.commit('currency/makeExchange', this.inputSecond)
+    const exchangeRate = parseFloat((this.inputFirst.rate / this.inputSecond.rate).toFixed(4))
+
+    this.$store.commit('currency/makeExchange', {
+      inputFirst: this.inputFirst,
+      inputSecond: this.inputSecond,
+      exchangeRate
+    })
   }
 }
 </script>
